@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>재무교수진 (Faculty) | 연세대학교 경영대학 재무분야</title>
+  <meta name="description" content="연세대학교 경영대학 재무분야 전임교수진 및 명예교수진 소개" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="../assets/css/style-b.css" />
+</head>
+<body>
+
+  <!-- 상단 유틸리티 바 -->
+  <div class="utility-bar">
+    <div class="utility-container">
+      <div class="utility-links">
+        <a href="https://ysb.yonsei.ac.kr" target="_blank" rel="noopener">연세대학교 경영대학 ↗</a>
+        <a href="https://ysb.yonsei.ac.kr/ysb/ms-phd/major.do" target="_blank" rel="noopener">일반대학원 ↗</a>
+        <a href="https://www.yonsei.ac.kr" target="_blank" rel="noopener">연세대학교 ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 메인 헤더 및 내비게이션 -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="../index.html" class="brand">
+        <img src="../assets/images/logo.png" alt="연세대학교 경영대학 로고" class="brand-logo" onerror="this.style.display='none'" />
+        <div class="brand-text">
+          <span class="brand-school">Yonsei School of Business</span>
+          <span class="brand-dept">재무분야 (Finance Division)</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a href="../index.html" class="nav-link">재무분야 소개</a>
+        <a href="../faculty/index.html" class="nav-link active">교수진 (Faculty)</a>
+        <a href="../ms-finance/index.html" class="nav-link">석/박사과정 (MS/Ph.D.)</a>
+        <a href="../fmba/index.html" class="nav-link">Finance MBA (FMBA)</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 영역 -->
+  <main class="main-content">
+
+    <div class="page-masthead" style="border-bottom: none; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+      <div class="page-kicker">Faculty Directory</div>
+      <h1 class="page-title">재무교수진 (Faculty)</h1>
+    </div>
+
+    <!-- 전임교수 헤더 및 검색 -->
+    <div class="faculty-toolbar">
+      <h2 class="faculty-section-title">전임교수진</h2>
+      <div>
+        <input type="search" id="faculty-search" class="editorial-search" placeholder="교수명, 연구분야 검색..." aria-label="교수진 검색" />
+      </div>
+    </div>
+
+    <!-- 전임교수 명단 (단일 통합 로스터) -->
+    <div class="faculty-roster" id="faculty-grid"></div>
+
+    <!-- 명예교수 테이블 -->
+    <div style="margin-bottom: 1rem;">
+      <div class="page-kicker">Professors Emeriti</div>
+      <h2 class="faculty-section-title" style="margin-bottom: 0.85rem;">명예교수진</h2>
+    </div>
+    <div class="academic-table-wrap">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>성명</th>
+            <th>직위</th>
+            <th>전공분야</th>
+            <th>연구실</th>
+            <th>연락처</th>
+            <th>이메일</th>
+            <th>공식 프로필</th>
+          </tr>
+        </thead>
+        <tbody id="emeritus-tbody"></tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <div style="font-family:var(--font-serif); font-size:1.02rem; font-weight:700; color:#ffffff; margin-bottom:0.35rem;">
+          연세대학교 경영대학 재무분야 (Finance Division, Yonsei School of Business)
+        </div>
+        <p style="margin-bottom:0.2rem;">03722 서울특별시 서대문구 연세로 50 212동(경영관) 연세대학교 경영대학</p>
+        <p style="color:rgba(255,255,255,0.5);">Copyright © 2026 Yonsei School of Business. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/app-b.js"></script>
+</body>
+</html>
