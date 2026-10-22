@@ -162,7 +162,6 @@ function renderFacultyB(data) {
         <td style="font-weight:700; color:var(--yonsei-navy);">
           <a href="${em.ysbLink}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${em.name}</a>
         </td>
-        <td>${em.title}</td>
         <td>${em.major}</td>
         <td>${em.office}</td>
         <td>${em.phone}</td>
