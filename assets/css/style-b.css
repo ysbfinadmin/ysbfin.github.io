@@ -174,7 +174,7 @@ ul, ol {
 }
 
 .brand-logo {
-  height: 44px;
+  height: 52px;
   width: auto;
   object-fit: contain;
 }
@@ -182,12 +182,15 @@ ul, ol {
 .brand-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 0.08rem;
 }
 
 .brand-school {
   font-family: inherit;
   font-size: 0.78rem;
   font-weight: 600;
+  line-height: 1.15;
   color: var(--yonsei-blue);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -198,6 +201,7 @@ ul, ol {
   font-family: inherit;
   font-size: 1.25rem;
   font-weight: 800;
+  line-height: 1.15;
   color: var(--yonsei-navy);
   letter-spacing: -0.02em;
   display: flex;
@@ -1340,7 +1344,7 @@ ul, ol {
     gap: 0.65rem;
   }
   .brand-logo {
-    height: 36px;
+    height: 42px;
   }
   .brand-school {
     font-size: 0.72rem;
@@ -1375,7 +1379,7 @@ ul, ol {
     padding: 0.6rem 0.85rem;
   }
   .brand-logo {
-    height: 32px;
+    height: 36px;
   }
   .brand-school {
     font-size: 0.68rem;
