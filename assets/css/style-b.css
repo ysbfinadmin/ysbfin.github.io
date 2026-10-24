@@ -1443,3 +1443,119 @@ ul, ol {
   content: "@";
   padding: 0 0.5px;
 }
+
+
+/* ==========================================================================
+   Main Page Color Refresh (2026-10)
+   B: 재무 그리드 + 주가·거래량 차트 텍스처 / C: 히어로 그라데이션 깊이 / E: 섹션 리듬
+   ========================================================================== */
+
+/* C. 히어로 그라데이션: 헤드라인 뒤 블루 글로우 */
+.editorial-hero {
+  background:
+    radial-gradient(ellipse 60% 70% at 22% 42%, rgba(70, 140, 220, 0.38), transparent 70%),
+    linear-gradient(135deg, #001a3a 0%, #003876 55%, #0b3f7a 100%);
+}
+
+/* B-1. 금색 광원 + 모눈 그리드 (아래로 갈수록 흐려짐) */
+.editorial-hero::before {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(197, 163, 90, 0.36), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 44px);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+}
+
+/* B-2. 주가(라인 + 이동평균) + 거래량 차트: 히어로 구분선을 x축으로 사용 */
+.editorial-hero-grid {
+  position: relative;
+  z-index: 0;
+}
+
+.editorial-hero-grid::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  top: -2.5rem;
+  bottom: 0;
+  pointer-events: none;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><defs><linearGradient id='a' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='0.10'/><stop offset='1' stop-color='%23ffffff' stop-opacity='0'/></linearGradient></defs><line x1='0' y1='252' x2='1200' y2='252' stroke='%23ffffff' stroke-opacity='0.08' vector-effect='non-scaling-stroke'/><polygon points='15,252 15,184.6 45,181.6 75,190 105,187.4 135,172.8 165,177.8 195,182.8 225,170.1 255,154 285,154.6 315,155.4 345,154.5 375,162.6 405,167.1 435,171.5 465,162.9 495,148.5 525,145.1 555,132.9 585,116.4 615,110.7 645,112.9 675,107.8 705,94.7 735,80.9 765,69.7 795,63.2 825,62.4 855,58.5 885,52.5 915,37 945,40 975,40.2 1005,30.6 1035,33.1 1065,29.8 1095,33 1125,38.9 1155,25 1185,28.6 1185,252' fill='url(%23a)'/><polyline points='15,184.6 45,181.6 75,190 105,187.4 135,172.8 165,177.8 195,182.8 225,170.1 255,154 285,154.6 315,155.4 345,154.5 375,162.6 405,167.1 435,171.5 465,162.9 495,148.5 525,145.1 555,132.9 585,116.4 615,110.7 645,112.9 675,107.8 705,94.7 735,80.9 765,69.7 795,63.2 825,62.4 855,58.5 885,52.5 915,37 945,40 975,40.2 1005,30.6 1035,33.1 1065,29.8 1095,33 1125,38.9 1155,25 1185,28.6' fill='none' stroke='%23ffffff' stroke-opacity='0.26' stroke-width='1.6' stroke-linejoin='round' vector-effect='non-scaling-stroke'/><polyline points='15,184.6 45,183.1 75,185.4 105,185.9 135,183.3 165,182.4 195,182.1 225,180.2 255,174.2 285,168.7 315,165.8 345,161.9 375,158.5 405,158 435,161 465,162.3 495,161.2 525,159.6 555,154.7 585,146.2 615,136.1 645,127.7 675,121 705,112.6 735,103.9 765,96.1 795,88.2 825,79.8 855,71.6 885,64.5 915,57.2 945,52.3 975,48.4 1005,43.1 1035,38.9 1065,35.1 1095,34.4 1125,34.3 1155,31.7 1185,31.4' fill='none' stroke='%23e6d2a8' stroke-opacity='0.40' stroke-width='1.2' stroke-dasharray='5 5' vector-effect='non-scaling-stroke'/><rect x='5' y='291' width='20' height='9' fill='%23ffffff' fill-opacity='0.13'/><rect x='35' y='277' width='20' height='23' fill='%23ffffff' fill-opacity='0.13'/><rect x='65' y='272' width='20' height='28' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='95' y='285' width='20' height='15' fill='%23ffffff' fill-opacity='0.13'/><rect x='125' y='267' width='20' height='33' fill='%23ffffff' fill-opacity='0.13'/><rect x='155' y='277' width='20' height='23' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='185' y='280' width='20' height='20' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='215' y='276' width='20' height='24' fill='%23ffffff' fill-opacity='0.13'/><rect x='245' y='264' width='20' height='36' fill='%23ffffff' fill-opacity='0.13'/><rect x='275' y='290' width='20' height='10' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='305' y='283' width='20' height='17' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='335' y='283' width='20' height='17' fill='%23ffffff' fill-opacity='0.13'/><rect x='365' y='274' width='20' height='26' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='395' y='279' width='20' height='21' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='425' y='278' width='20' height='22' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='455' y='277' width='20' height='23' fill='%23ffffff' fill-opacity='0.13'/><rect x='485' y='262' width='20' height='38' fill='%23ffffff' fill-opacity='0.13'/><rect x='515' y='287' width='20' height='13' fill='%23ffffff' fill-opacity='0.13'/><rect x='545' y='269' width='20' height='31' fill='%23ffffff' fill-opacity='0.13'/><rect x='575' y='270' width='20' height='30' fill='%23ffffff' fill-opacity='0.13'/><rect x='605' y='278' width='20' height='22' fill='%23ffffff' fill-opacity='0.13'/><rect x='635' y='280' width='20' height='20' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='665' y='283' width='20' height='17' fill='%23ffffff' fill-opacity='0.13'/><rect x='695' y='271' width='20' height='29' fill='%23ffffff' fill-opacity='0.13'/><rect x='725' y='270' width='20' height='30' fill='%23ffffff' fill-opacity='0.13'/><rect x='755' y='278' width='20' height='22' fill='%23ffffff' fill-opacity='0.13'/><rect x='785' y='285' width='20' height='15' fill='%23ffffff' fill-opacity='0.13'/><rect x='815' y='288' width='20' height='12' fill='%23ffffff' fill-opacity='0.13'/><rect x='845' y='276' width='20' height='24' fill='%23ffffff' fill-opacity='0.13'/><rect x='875' y='276' width='20' height='24' fill='%23ffffff' fill-opacity='0.13'/><rect x='905' y='267' width='20' height='33' fill='%23ffffff' fill-opacity='0.13'/><rect x='935' y='279' width='20' height='21' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='965' y='285' width='20' height='15' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='995' y='273' width='20' height='27' fill='%23ffffff' fill-opacity='0.13'/><rect x='1025' y='280' width='20' height='20' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='1055' y='281' width='20' height='19' fill='%23ffffff' fill-opacity='0.13'/><rect x='1085' y='283' width='20' height='17' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='1115' y='284' width='20' height='16' fill='%23e6d2a8' fill-opacity='0.22'/><rect x='1145' y='271' width='20' height='29' fill='%23ffffff' fill-opacity='0.13'/><rect x='1175' y='287' width='20' height='13' fill='%23e6d2a8' fill-opacity='0.22'/></svg>") no-repeat center bottom / 100% 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 30%, #000 58%, #000 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 30%, #000 58%, #000 100%);
+}
+
+@media (max-width: 960px) {
+  .editorial-hero-grid::before {
+    opacity: 0.6;
+  }
+}
+
+/* E-1. 띠 배경 섹션 (메인 03 중점 연구 영역) */
+.section-band {
+  background: #eef2f8;
+  box-shadow: 0 0 0 100vmax #eef2f8;
+  clip-path: inset(0 -100vmax);
+  border-top-color: transparent;
+  padding-top: 3.25rem;
+  padding-bottom: 3.25rem;
+}
+
+.section-band + .editorial-section {
+  border-top-color: transparent;
+}
+
+/* E-2. 4대 영역 카드: 번호 + 상단 컬러 액센트 */
+.section-band .pillars-matrix {
+  counter-reset: pillar;
+  border: none;
+  gap: 1rem;
+}
+
+.section-band .pillar-cell,
+.section-band .pillar-cell:nth-child(even) {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #dfe5ee !important;
+  border-top: 3px solid var(--accent, #003876) !important;
+  padding: 1.5rem 1.6rem 1.35rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section-band .pillar-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 32, 70, 0.08);
+}
+
+.section-band .pillar-cell::before {
+  counter-increment: pillar;
+  content: "0" counter(pillar);
+  position: absolute;
+  top: 1.1rem;
+  right: 1.3rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent, #003876);
+  opacity: 0.14;
+}
+
+.section-band .pillar-cell:nth-child(1) { --accent: #003876; }
+.section-band .pillar-cell:nth-child(2) { --accent: #2f6fb5; }
+.section-band .pillar-cell:nth-child(3) { --accent: #5b9bd5; }
+.section-band .pillar-cell:nth-child(4) { --accent: #b08a45; }
+
+.section-band .pillar-cell-title {
+  padding-right: 2.9rem;
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+
+@media (max-width: 960px) {
+  .section-band {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+}
