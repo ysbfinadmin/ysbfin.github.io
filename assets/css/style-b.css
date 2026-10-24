@@ -1559,3 +1559,21 @@ ul, ol {
     padding-bottom: 2.25rem;
   }
 }
+
+/* Curriculum Ledger Table Header width (Year 2 (Foundation) 1줄 유지) */
+.curriculum-ledger th {
+  width: 195px;
+  white-space: nowrap;
+}
+
+/* 4대 연구영역 카드 제목 1줄 통일 (영문 긴 제목 줄바꿈 방지) */
+.section-band .pillar-cell-title {
+  font-size: 1.04rem;
+  letter-spacing: -0.02em;
+  padding-right: 2.2rem;
+  line-height: 1.35;
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
