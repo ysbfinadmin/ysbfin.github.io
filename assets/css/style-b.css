@@ -80,6 +80,7 @@ ul, ol {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .design-switch-links {
@@ -121,6 +122,7 @@ ul, ol {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .utility-links {
@@ -161,13 +163,14 @@ ul, ol {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.875rem;
+  flex-shrink: 0;
 }
 
 .brand-logo {
@@ -188,6 +191,7 @@ ul, ol {
   color: var(--yonsei-blue);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .brand-dept {
@@ -199,6 +203,7 @@ ul, ol {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .main-nav {
@@ -212,7 +217,8 @@ ul, ol {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-secondary, #64748b);
-  padding: 0.6rem 1.1rem;
+  padding: 0.55rem 0.85rem;
+  white-space: nowrap;
   border-radius: 8px;
   border-bottom: none;
   cursor: pointer;
@@ -328,6 +334,7 @@ ul, ol {
   grid-template-columns: repeat(4, 1fr);
   padding-top: 2rem;
 }
+
 
 .ledger-item {
   padding-right: 1.5rem;
@@ -904,6 +911,26 @@ ul, ol {
 /* --------------------------------------------------------------------------
    10. Academic Tables & Regulations (MS/Ph.D. & FMBA)
    -------------------------------------------------------------------------- */
+#emeritus-grid-en {
+  gap: 1.25rem;
+}
+
+#emeritus-grid-en .academic-table {
+  font-size: 0.84rem;
+}
+
+#emeritus-grid-en .academic-table thead th,
+#emeritus-grid-en .academic-table tbody td {
+  padding: 0.65rem 0.5rem;
+}
+
+.emeritus-grid-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
 .academic-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -1025,7 +1052,7 @@ ul, ol {
   display: inline-flex;
   border-bottom: 1px solid var(--rule-medium);
   margin-bottom: 1.5rem;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .editorial-tab-btn {
@@ -1068,6 +1095,10 @@ ul, ol {
 }
 
 .lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: var(--bg-paper);
   border: none;
   padding: 0.38rem 0.85rem;
@@ -1079,6 +1110,10 @@ ul, ol {
 }
 
 .lang-btn + .lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   border-left: 1px solid var(--rule-medium);
 }
 
@@ -1226,7 +1261,7 @@ ul, ol {
 @media (max-width: 960px) {
   .editorial-hero-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   .hero-ledger {
     grid-template-columns: repeat(2, 1fr);
@@ -1243,6 +1278,7 @@ ul, ol {
   .grad-split,
   .pillars-matrix,
   .faculty-roster,
+  .emeritus-grid-wrap,
   .degree-columns,
   .specs-ledger,
   .ug-meta-grid {
@@ -1360,4 +1396,28 @@ ul, ol {
     justify-content: center;
     margin-left: 0;
   }
+}
+
+
+/* Header Language Switcher */
+.header-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.65rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--rule-light);
+  flex-shrink: 0;
+}
+
+.header-lang-switch .lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.32rem 0.68rem;
+  font-size: 0.78rem;
+}
+.academic-table th.nowrap,
+.academic-table td.nowrap {
+  white-space: nowrap;
 }

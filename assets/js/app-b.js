@@ -10,12 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFacultyB(data);
   renderMsPhdB(data);
   renderFmbaB(data);
+
+  if (window.location.hash === "#en" || window.location.search.includes("lang=en")) {
+    const enLink = document.getElementById("btn-lang-en");
+    if (enLink && enLink.tagName === "A" && enLink.getAttribute("href") && document.documentElement.lang !== "en") {
+      window.location.replace(enLink.getAttribute("href"));
+      return;
+    }
+    window.setSiteLang("en");
+  }
 });
 
 function renderOverviewB(data) {
-  // 1. Hero Ledger Strip (4 columns separated by hairlines)
+  // 1. Hero Ledger Strip (KOR & ENG)
   const statsContainer = document.getElementById("hero-stats");
-  if (statsContainer) {
+  if (statsContainer && data.about.stats) {
     statsContainer.innerHTML = data.about.stats
       .map(
         (s) => `
@@ -29,7 +38,22 @@ function renderOverviewB(data) {
       .join("");
   }
 
-  // 2. 4 Core Research Pillars Matrix (2x2 architectural grid, no pill tags)
+  const statsContainerEn = document.getElementById("hero-stats-en");
+  if (statsContainerEn && data.about.statsEn) {
+    statsContainerEn.innerHTML = data.about.statsEn
+      .map(
+        (s) => `
+      <div class="ledger-item">
+        <div class="ledger-figure">${s.number}</div>
+        <div class="ledger-title">${s.label}</div>
+        <div class="ledger-meta">${s.sub}</div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  // 2. 4 Core Research Pillars Matrix (KOR & ENG)
   const pillarsContainer = document.getElementById("research-pillars");
   if (pillarsContainer) {
     pillarsContainer.innerHTML = data.about.pillars
@@ -50,7 +74,27 @@ function renderOverviewB(data) {
       .join("");
   }
 
-  // 3. Division Leadership Table
+  const pillarsContainerEn = document.getElementById("research-pillars-en");
+  if (pillarsContainerEn) {
+    pillarsContainerEn.innerHTML = data.about.pillars
+      .map(
+        (p) => `
+      <div class="pillar-cell">
+        <div>
+          <h3 class="pillar-cell-title">${p.titleEn}</h3>
+          <div class="pillar-cell-en">${p.title}</div>
+          <p class="pillar-cell-desc">${p.descEn || p.desc}</p>
+        </div>
+        <div class="pillar-keywords">
+          <strong>Key Topics</strong> ${(p.keywordsEn || p.keywords).join(" · ")}
+        </div>
+      </div>
+    `
+      )
+      .join("");
+  }
+
+  // 3. Division Leadership Table (KOR & ENG)
   const leadershipBody = document.getElementById("leadership-tbody");
   if (leadershipBody) {
     leadershipBody.innerHTML = data.meta.leadership
@@ -71,28 +115,71 @@ function renderOverviewB(data) {
       )
       .join("");
   }
+
+  const leadershipBodyEn = document.getElementById("leadership-tbody-en");
+  if (leadershipBodyEn) {
+    leadershipBodyEn.innerHTML = data.meta.leadership
+      .filter((l) => !l.hideInEn)
+      .map(
+        (l) => `
+      <tr>
+        <th>
+          ${l.roleEn}
+          <span>${l.role}</span>
+        </th>
+        <td style="font-weight:700; color:var(--yonsei-navy);">
+          <a href="${l.link}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${l.nameEn || l.name} ↗</a>
+        </td>
+        <td>Office: ${l.officeEn || l.office}</td>
+        <td><a href="mailto:${l.email}" style="color:var(--yonsei-blue);">${l.email}</a></td>
+      </tr>
+    `
+      )
+      .join("");
+  }
 }
 
 function renderFacultyB(data) {
   const grid = document.getElementById("faculty-grid");
+  const gridEn = document.getElementById("faculty-grid-en");
   const emeritusBody = document.getElementById("emeritus-tbody");
   const searchInput = document.getElementById("faculty-search");
+  const searchInputEn = document.getElementById("faculty-search-en");
 
-  let searchQuery = "";
+  let searchQueryKo = "";
+  let searchQueryEn = "";
 
-  function drawFaculty() {
-    if (!grid) return;
-    const q = searchQuery.trim().toLowerCase();
-    const filtered = data.faculty.filter((prof) => {
+  const normPath = window.location.pathname.replace(/\\/g, "/");
+  const assetPrefix =
+    normPath.includes("/en/faculty/") || normPath.includes("/en/ms-finance/")
+      ? "../../"
+      : normPath.includes("/faculty/") ||
+        normPath.includes("/ms-finance/") ||
+        normPath.includes("/fmba/") ||
+        normPath.includes("/en/") ||
+        normPath.includes("/b/") ||
+        normPath.includes("/OptionB/")
+      ? "../"
+      : "";
+
+  function filterFaculty(query) {
+    const q = query.trim().toLowerCase();
+    return data.faculty.filter((prof) => {
       if (!q) return true;
       return (
         prof.name.toLowerCase().includes(q) ||
         prof.nameEn.toLowerCase().includes(q) ||
         prof.degree.toLowerCase().includes(q) ||
         prof.researchTags.some((t) => t.toLowerCase().includes(q)) ||
-        prof.briefBio.toLowerCase().includes(q)
+        prof.briefBio.toLowerCase().includes(q) ||
+        (prof.briefBioEn && prof.briefBioEn.toLowerCase().includes(q))
       );
     });
+  }
+
+  function drawFacultyKo() {
+    if (!grid) return;
+    const filtered = filterFaculty(searchQueryKo);
 
     if (filtered.length === 0) {
       grid.innerHTML = `<div style="grid-column: 1 / -1; padding: 2.5rem 0; color: var(--text-muted);">검색 조건에 해당하는 교수진이 없습니다.</div>`;
@@ -102,8 +189,7 @@ function renderFacultyB(data) {
     grid.innerHTML = filtered
       .map((p) => {
         const primaryLink = p.website || p.ysbLink;
-        const isSubfolder = window.location.pathname.replace(/\\/g, "/").includes("/faculty/") || window.location.pathname.replace(/\\/g, "/").includes("/b/") || window.location.pathname.replace(/\\/g, "/").includes("/OptionB/");
-        const photoSrc = p.photo.startsWith("http") ? p.photo : (isSubfolder ? `../${p.photo}` : p.photo);
+        const photoSrc = p.photo.startsWith("http") ? p.photo : `${assetPrefix}${p.photo}`;
         return `
       <article class="faculty-entry">
         <a href="${primaryLink}" target="_blank" rel="noopener" class="faculty-portrait-link" title="${p.name} 교수 프로필">
@@ -144,33 +230,119 @@ function renderFacultyB(data) {
       .join("");
   }
 
+  function drawFacultyEn() {
+    if (!gridEn) return;
+    const filtered = filterFaculty(searchQueryEn);
+
+    if (filtered.length === 0) {
+      gridEn.innerHTML = `<div style="grid-column: 1 / -1; padding: 2.5rem 0; color: var(--text-muted);">No faculty members match your search criteria.</div>`;
+      return;
+    }
+
+    gridEn.innerHTML = filtered
+      .map((p) => {
+        const primaryLink = p.website || p.ysbLink;
+        const photoSrc = p.photo.startsWith("http") ? p.photo : `${assetPrefix}${p.photo}`;
+        const rankEn = p.titleEn || p.title;
+        const dutyEn = p.roleBadgeEn !== undefined ? p.roleBadgeEn : p.roleBadge;
+        const officeEn = p.officeEn || p.office;
+        const websiteLabelEn = p.websiteLabelEn || p.websiteLabel || "Personal Website";
+        return `
+      <article class="faculty-entry">
+        <a href="${primaryLink}" target="_blank" rel="noopener" class="faculty-portrait-link" title="Prof. ${p.nameEn} Profile">
+          <img src="${photoSrc}" alt="Prof. ${p.nameEn}" class="faculty-portrait" onerror="this.onerror=null;this.src='${p.photoFallback}';" />
+        </a>
+        <div class="faculty-body">
+          <div>
+            <div class="faculty-heading-line">
+              <a href="${primaryLink}" target="_blank" rel="noopener" class="faculty-name-ko">${p.nameEn}</a>
+              <span class="faculty-name-en">${p.name}</span>
+              <span class="faculty-rank">${rankEn}</span>
+              ${dutyEn ? `<span class="faculty-duty">${dutyEn}</span>` : ""}
+            </div>
+            <div class="faculty-phd">${p.degree}</div>
+            <div class="faculty-fields" style="margin-top: 0.5rem; margin-bottom: 0.85rem;">
+              <strong>Research Areas:</strong> ${p.researchTags.join(", ")}
+            </div>
+          </div>
+          <div>
+            <div class="faculty-contact-row">
+              <span>Office: ${officeEn}</span>
+              <span>Tel. ${p.phone}</span>
+              <a href="mailto:${p.email}">${p.email}</a>
+            </div>
+            <div class="faculty-links-row">
+              ${
+                p.website
+                  ? `<a href="${p.website}" target="_blank" rel="noopener">${websiteLabelEn} ↗</a>`
+                  : ""
+              }
+              <a href="${p.ysbLink}" target="_blank" rel="noopener">YSB Profile ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+      })
+      .join("");
+  }
+
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
-      searchQuery = e.target.value;
-      drawFaculty();
+      searchQueryKo = e.target.value;
+      drawFacultyKo();
     });
   }
 
-  drawFaculty();
+  if (searchInputEn) {
+    searchInputEn.addEventListener("input", (e) => {
+      searchQueryEn = e.target.value;
+      drawFacultyEn();
+    });
+  }
 
-  // Emeritus Table (No pill badges)
-  if (emeritusBody) {
-    emeritusBody.innerHTML = data.emeritusFaculty
-      .map(
-        (em) => `
+  drawFacultyKo();
+  drawFacultyEn();
+
+  // Emeritus / Retired Faculty (KOR)
+  const emeritusLeft = document.getElementById("emeritus-tbody-left");
+  const emeritusRight = document.getElementById("emeritus-tbody-right");
+  const renderEmeritusRowKo = (em) => `
       <tr>
-        <td style="font-weight:700; color:var(--yonsei-navy);">
+        <td style="font-weight:700; color:var(--yonsei-navy); white-space:nowrap;">
           <a href="${em.ysbLink}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${em.name}</a>
         </td>
-        <td>${em.major}</td>
-        <td>${em.office}</td>
-        <td>${em.phone}</td>
-        <td>${em.email !== "-" ? `<a href="mailto:${em.email}" style="color:var(--yonsei-blue);">${em.email}</a>` : "-"}</td>
-        <td><a href="${em.ysbLink}" target="_blank" rel="noopener" class="editorial-link" style="font-size:0.8rem;">프로필 ↗</a></td>
+        <td style="white-space:nowrap;">${em.office}</td>
+        <td style="white-space:nowrap;">${em.phone}</td>
+        <td style="white-space:nowrap;">${em.email !== "-" ? `<a href="mailto:${em.email}" style="color:var(--yonsei-blue);">${em.email}</a>` : "-"}</td>
       </tr>
-    `
-      )
-      .join("");
+    `;
+
+  const half = Math.ceil(data.emeritusFaculty.length / 2);
+  if (emeritusLeft && emeritusRight) {
+    emeritusLeft.innerHTML = data.emeritusFaculty.slice(0, half).map(renderEmeritusRowKo).join("");
+    emeritusRight.innerHTML = data.emeritusFaculty.slice(half).map(renderEmeritusRowKo).join("");
+  } else if (emeritusBody) {
+    emeritusBody.innerHTML = data.emeritusFaculty.map(renderEmeritusRowKo).join("");
+  }
+
+  // Emeritus / Retired Faculty (ENG)
+  const emeritusLeftEn = document.getElementById("emeritus-tbody-left-en");
+  const emeritusRightEn = document.getElementById("emeritus-tbody-right-en");
+  const renderEmeritusRowEn = (em) => `
+      <tr>
+        <td style="font-weight:700; color:var(--yonsei-navy); white-space:nowrap;">
+          <a href="${em.ysbLink}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${em.nameEn || em.name}</a>
+        </td>
+        <td style="white-space:nowrap;">${em.officeEn || em.office}</td>
+        <td style="white-space:nowrap;">${em.phone}</td>
+        <td style="white-space:nowrap;">${em.email !== "-" ? `<a href="mailto:${em.email}" style="color:var(--yonsei-blue);">${em.email}</a>` : "-"}</td>
+      </tr>
+    `;
+
+  if (emeritusLeftEn && emeritusRightEn) {
+    emeritusLeftEn.innerHTML = data.emeritusFaculty.slice(0, half).map(renderEmeritusRowEn).join("");
+    emeritusRightEn.innerHTML = data.emeritusFaculty.slice(half).map(renderEmeritusRowEn).join("");
   }
 }
 
@@ -402,3 +574,110 @@ function renderFmbaB(data) {
       .join("");
   }
 }
+
+/**
+ * Global Language Switcher for Home (index.html), Faculty (faculty/index.html), and MS/Ph.D. (ms-finance/index.html)
+ */
+window.setSiteLang = function (lang) {
+  const isEn = lang === "en";
+  const targetBtn = document.getElementById(isEn ? "btn-lang-en" : "btn-lang-ko");
+  if (
+    targetBtn &&
+    targetBtn.tagName === "A" &&
+    targetBtn.getAttribute("href") &&
+    !targetBtn.classList.contains("active")
+  ) {
+    window.location.href = targetBtn.getAttribute("href");
+    return;
+  }
+  document.documentElement.lang = isEn ? "en" : "ko";
+
+  // 1. Toggle view sections
+  const koSections = ["home-ko", "hero-ko", "faculty-ko", "ms-phd-ko"];
+  const enSections = ["home-en", "hero-en", "faculty-en", "ms-phd-en"];
+
+  koSections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("active", !isEn);
+  });
+  enSections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("active", isEn);
+  });
+
+  // 2. Toggle language button active states
+  const btnKo = document.getElementById("btn-lang-ko");
+  const btnEn = document.getElementById("btn-lang-en");
+  if (btnKo) btnKo.classList.toggle("active", !isEn);
+  if (btnEn) btnEn.classList.toggle("active", isEn);
+
+  // 3. Update Header Brand & Navigation Links
+  const brandSchool = document.querySelector(".brand-school");
+  if (brandSchool) {
+    brandSchool.textContent = isEn ? "Yonsei School of Business" : "연세대학교 경영대학";
+  }
+
+  const brandDept = document.querySelector(".brand-dept");
+  if (brandDept) {
+    brandDept.textContent = isEn ? "Finance Division" : "재무분야";
+  }
+
+  const brandLink = document.querySelector(".brand");
+  if (brandLink) {
+    const baseHref = brandLink.getAttribute("href").split("#")[0];
+    brandLink.setAttribute("href", isEn ? `${baseHref}#en` : baseHref);
+  }
+
+  const navLinks = document.querySelectorAll(".main-nav .nav-link");
+  navLinks.forEach((link) => {
+    const rawHref = link.getAttribute("href") || "";
+    const baseHref = rawHref.split("#")[0];
+    if (baseHref.includes("faculty/")) {
+      link.textContent = isEn ? "Faculty" : "교수진 (Faculty)";
+      link.setAttribute("href", isEn ? `${baseHref}#en` : baseHref);
+    } else if (baseHref.includes("ms-finance/")) {
+      link.textContent = isEn ? "M.S. & Ph.D." : "석/박사과정 (MS/Ph.D.)";
+      link.setAttribute("href", isEn ? `${baseHref}#en` : baseHref);
+    } else if (baseHref.includes("fmba/")) {
+      link.textContent = "Finance MBA (FMBA)";
+      link.style.display = isEn ? "none" : "";
+    } else if (baseHref.endsWith("index.html") || baseHref === "./" || baseHref === "../") {
+      link.textContent = isEn ? "Overview" : "재무분야 소개";
+      link.setAttribute("href", isEn ? `${baseHref}#en` : baseHref);
+    }
+  });
+
+  // 4. Update Utility Bar Links
+  const utilLinks = document.querySelectorAll(".utility-links a");
+  if (utilLinks.length >= 3) {
+    utilLinks[0].textContent = isEn ? "Yonsei School of Business ↗" : "연세대학교 경영대학 ↗";
+    utilLinks[1].textContent = isEn ? "Graduate School ↗" : "일반대학원 ↗";
+    utilLinks[2].textContent = isEn ? "Yonsei University ↗" : "연세대학교 ↗";
+  }
+
+  // 5. Update Footer Text
+  const footerContainer = document.querySelector(".footer-container > div");
+  if (footerContainer) {
+    const titleEl = footerContainer.querySelector("div");
+    const paragraphs = footerContainer.querySelectorAll("p");
+    if (titleEl) {
+      titleEl.textContent = isEn
+        ? "Finance Division, Yonsei School of Business"
+        : "연세대학교 경영대학 재무분야 (Finance Division, Yonsei School of Business)";
+    }
+    if (paragraphs.length >= 1) {
+      paragraphs[0].textContent = isEn
+        ? "50 Yonsei-ro, Seodaemun-gu, Seoul 03722, Republic of Korea · Building 212 (Yonsei School of Business)"
+        : "03722 서울특별시 서대문구 연세로 50 212동(경영관) 연세대학교 경영대학";
+    }
+  }
+
+  // 6. Update URL Hash
+  if (isEn) {
+    history.replaceState(null, "", "#en");
+  } else {
+    history.replaceState(null, "", window.location.pathname);
+  }
+};
+
+window.setMsFinanceLang = window.setSiteLang;
