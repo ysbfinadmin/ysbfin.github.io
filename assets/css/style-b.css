@@ -1421,3 +1421,21 @@ ul, ol {
 .academic-table td.nowrap {
   white-space: nowrap;
 }
+
+/* Email Obfuscation / Anti-Scraping Protection */
+.eml-protect {
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.eml-protect:hover {
+  color: var(--yonsei-blue, #003876);
+  text-decoration: underline;
+}
+.eml-at::before {
+  content: "@";
+  padding: 0 0.5px;
+}

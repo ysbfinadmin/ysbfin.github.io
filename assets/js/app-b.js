@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFacultyB(data);
   renderMsPhdB(data);
   renderFmbaB(data);
+  initEmailProtection();
 
   if (window.location.hash === "#en" || window.location.search.includes("lang=en")) {
     const enLink = document.getElementById("btn-lang-en");
@@ -20,6 +21,52 @@ document.addEventListener("DOMContentLoaded", () => {
     window.setSiteLang("en");
   }
 });
+
+
+/**
+ * Email Obfuscation Helpers
+ */
+function decodeEmail(val) {
+  if (!val || val === "-") return "-";
+  return val.includes("@") ? val : atob(val);
+}
+
+function getProtectedEmailHtml(rawVal, extraStyle = "") {
+  if (!rawVal || rawVal === "-") return "-";
+  const em = decodeEmail(rawVal);
+  const parts = em.split("@");
+  if (parts.length !== 2) return em;
+  const u = btoa(parts[0]);
+  const d = btoa(parts[1]);
+  const style = extraStyle ? ` style="${extraStyle}"` : "";
+  return `<a href="javascript:void(0)" class="eml-protect" data-u="${u}" data-d="${d}"${style} title="Send Email"><span class="eml-text">Email</span></a>`;
+}
+
+function initEmailProtection() {
+  document.querySelectorAll(".eml-protect").forEach((el) => {
+    const u = el.getAttribute("data-u");
+    const d = el.getAttribute("data-d");
+    if (!u || !d) return;
+    try {
+      const user = atob(u);
+      const domain = atob(d);
+      const fullEmail = `${user}@${domain}`;
+      el.textContent = fullEmail;
+      
+      const activateMailto = () => {
+        el.setAttribute("href", `mailto:${fullEmail}`);
+      };
+      el.addEventListener("mouseenter", activateMailto, { once: true });
+      el.addEventListener("focus", activateMailto, { once: true });
+      el.addEventListener("click", () => {
+        activateMailto();
+        window.location.href = `mailto:${fullEmail}`;
+      });
+    } catch (e) {
+      // ignore
+    }
+  });
+}
 
 function renderOverviewB(data) {
   // 1. Hero Ledger Strip (KOR & ENG)
@@ -109,7 +156,7 @@ function renderOverviewB(data) {
           <a href="${l.link}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${l.name} ↗</a>
         </td>
         <td>연구실: ${l.office}</td>
-        <td><a href="mailto:${l.email}" style="color:var(--yonsei-blue);">${l.email}</a></td>
+        <td>${getProtectedEmailHtml(l.email, "color:var(--yonsei-blue);")}</td>
       </tr>
     `
       )
@@ -131,7 +178,7 @@ function renderOverviewB(data) {
           <a href="${l.link}" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule-medium);">${l.nameEn || l.name} ↗</a>
         </td>
         <td>Office: ${l.officeEn || l.office}</td>
-        <td><a href="mailto:${l.email}" style="color:var(--yonsei-blue);">${l.email}</a></td>
+        <td>${getProtectedEmailHtml(l.email, "color:var(--yonsei-blue);")}</td>
       </tr>
     `
       )
@@ -212,7 +259,7 @@ function renderFacultyB(data) {
             <div class="faculty-contact-row">
               <span>연구실: ${p.office}</span>
               <span>Tel. ${p.phone}</span>
-              <a href="mailto:${p.email}">${p.email}</a>
+              ${getProtectedEmailHtml(p.email)}
             </div>
             <div class="faculty-links-row">
               ${
@@ -269,7 +316,7 @@ function renderFacultyB(data) {
             <div class="faculty-contact-row">
               <span>Office: ${officeEn}</span>
               <span>Tel. ${p.phone}</span>
-              <a href="mailto:${p.email}">${p.email}</a>
+              ${getProtectedEmailHtml(p.email)}
             </div>
             <div class="faculty-links-row">
               ${
@@ -314,7 +361,7 @@ function renderFacultyB(data) {
         </td>
         <td style="white-space:nowrap;">${em.office}</td>
         <td style="white-space:nowrap;">${em.phone}</td>
-        <td style="white-space:nowrap;">${em.email !== "-" ? `<a href="mailto:${em.email}" style="color:var(--yonsei-blue);">${em.email}</a>` : "-"}</td>
+        <td style="white-space:nowrap;">${getProtectedEmailHtml(em.email, "color:var(--yonsei-blue);")}</td>
       </tr>
     `;
 
@@ -336,7 +383,7 @@ function renderFacultyB(data) {
         </td>
         <td style="white-space:nowrap;">${em.officeEn || em.office}</td>
         <td style="white-space:nowrap;">${em.phone}</td>
-        <td style="white-space:nowrap;">${em.email !== "-" ? `<a href="mailto:${em.email}" style="color:var(--yonsei-blue);">${em.email}</a>` : "-"}</td>
+        <td style="white-space:nowrap;">${getProtectedEmailHtml(em.email, "color:var(--yonsei-blue);")}</td>
       </tr>
     `;
 
